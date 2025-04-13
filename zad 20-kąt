@@ -1,0 +1,54 @@
+import pygame
+import math
+
+pygame.init()
+win = pygame.display.set_mode((600, 600))
+pygame.display.set_caption("20-kąt na białym tle")
+
+# Kolory
+FIOLETOWY = (128, 0, 128)
+BIALY = (255, 255, 255)
+
+# Parametry wielokąta
+n = 20  # liczba boków → teraz 20-kąt
+radius = 150
+angle_offset = 0
+scale = 1.0
+position = [300, 300]
+
+clock = pygame.time.Clock()
+run = True
+
+def draw_polygon():
+    points = []
+    for i in range(n):
+        angle = 2 * math.pi * i / n + angle_offset
+        x = position[0] + scale * radius * math.cos(angle)
+        y = position[1] + scale * radius * math.sin(angle)
+        points.append((x, y))
+    pygame.draw.polygon(win, FIOLETOWY, points, 3)
+
+while run:
+    clock.tick(60)
+    win.fill(BIALY)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                angle_offset += 0.1
+            elif event.key == pygame.K_2:
+                scale += 0.1
+            elif event.key == pygame.K_3:
+                scale = max(0.1, scale - 0.1)
+            elif event.key == pygame.K_4:
+                position[0] -= 10
+            elif event.key == pygame.K_5:
+                position[0] += 10
+
+    draw_polygon()
+    pygame.display.update()
+
+pygame.quit()
